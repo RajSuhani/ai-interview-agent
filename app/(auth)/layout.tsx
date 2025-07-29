@@ -1,10 +1,15 @@
-import { ReactNode } from 'react';
+// app/(auth)/layout.tsx
 
-interface AuthLayoutProps {
-    children: ReactNode;
-}
+import { ReactNode } from "react";
+import { redirect } from "next/navigation";
+import { isAuthenticated } from "@/lib/actions/auth.action";
 
-const AuthLayout = ({ children }: AuthLayoutProps) => {
+const AuthLayout = async ({ children }: { children: ReactNode }) => {
+    const isUserAuthenticated = await isAuthenticated();
+
+    // If already logged in, prevent access to sign-in/sign-up pages
+    if (isUserAuthenticated) redirect("/");
+
     return <div className="auth-layout">{children}</div>;
 };
 
